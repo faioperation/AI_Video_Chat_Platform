@@ -1,0 +1,13 @@
+services:
+  db:
+    ports:
+      - "3306:3306" # Expose MySQL locally for developers
+
+  backend:
+    environment:
+      APP_DEBUG: "true"
+      APP_ENV: "local"
+
+  ai:
+    ports:
+      - "8000:8000" # Expose FastAPI locally for debugging API calls

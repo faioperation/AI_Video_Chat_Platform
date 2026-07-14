@@ -17,7 +17,8 @@ class ChatController extends Controller
             $user = User::where("email", $email)->first();
 
             if($user){
-                return Http::post("http://127.0.0.1:8000/api/session/create", $request->all());
+                $aiUrl = env('AI_SERVER_URL', 'http://127.0.0.1:8000');
+                return Http::post("{$aiUrl}/api/session/create", $request->all());
             }
 
             return response()->json([
@@ -41,7 +42,8 @@ class ChatController extends Controller
 
             if($user){
 
-                $pythonResponse = Http::post("http://127.0.0.1:8000/api/chat", $request->all());
+                $aiUrl = env('AI_SERVER_URL', 'http://127.0.0.1:8000');
+                $pythonResponse = Http::post("{$aiUrl}/api/chat", $request->all());
 
                 if (!$pythonResponse->successful()) {
 
@@ -63,7 +65,7 @@ class ChatController extends Controller
                             'user_id' => $user->id,
                             'user_name' => $user->name,
                             'user_email' => $user->email,
-                            'chat_duration_seconds' => $data['chat_duration_seconds'] ? (double)($data['chat_duration_seconds'] / 1000) : null,
+                            'chat_duration_seconds' => $data['chat_duration_seconds'] ?? null,
                             'session_token' => $data['session_token'] ?? null,
                             'prompt_tokens' => $data['prompt_tokens'] ?? null,
                             'completion_tokens' => $data['completion_tokens'] ?? null,
@@ -96,7 +98,8 @@ class ChatController extends Controller
 
             if($user){
 
-                return Http::post("http://127.0.0.1:8000/api/session/{$request->token}/played", $request->all());
+                $aiUrl = env('AI_SERVER_URL', 'http://127.0.0.1:8000');
+                return Http::post("{$aiUrl}/api/session/{$request->token}/played", $request->all());
 
             } else {
 
@@ -120,8 +123,8 @@ class ChatController extends Controller
             $user = User::where("email", $email)->first();
 
             if($user){
-                // return Http::post("http://127.0.0.1:8000/api/session/create", $request->all());
-                return Http::get("http://127.0.0.1:8000/");
+                $aiUrl = env('AI_SERVER_URL', 'http://127.0.0.1:8000');
+                return Http::get("{$aiUrl}/");
             } else
 
             return response()->json([
